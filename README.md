@@ -1,1 +1,1 @@
-https://fs-phonebook-backend.herokuapp.com/api/persons/
+https://fs-phonebook-backend.herokuapp.com/
