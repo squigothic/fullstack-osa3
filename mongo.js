@@ -1,14 +1,5 @@
-require("dotenv").config()
 const mongoose = require('mongoose')
-
-const url = process.env.DB_HOST
-
-mongoose.connect(url, { useNewUrlParser: true })
-
-const Person = mongoose.model('Person', {
-  name: String,
-  number: String
-})
+const Person = require('./modules/person')
 
 const addToDatabse = (name, number) => {
   const person = new Person({ name, number })
@@ -25,11 +16,19 @@ const printPeople = () => {
   Person
   .find({})
   .then(result => {
-    result.forEach(person => {
-      console.log(person.name, person.number)
-    })
+    console.log(result)
+    console.log('-------')
+    result.forEach(person => console.log(Person.format(person)))
     mongoose.connection.close()
   })
+/*   const persons = 
+    Person
+      .find({})
+      .then(result => {
+        console.log(result)
+        mongoose.connection.close()
+      })
+  console.log(persons) */
 }
 
 const [,,name, number] = process.argv
