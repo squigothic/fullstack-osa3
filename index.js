@@ -19,7 +19,7 @@ app.get('/api/persons', (req, res) => {
     .then(persons => {
       res.json(persons.map(Person.format))
     })
-}) 
+})
 
 app.get('/info', (req, res) => {
   Person
@@ -37,7 +37,7 @@ app.get('/api/persons/:id', (req, res) => {
     })
     .catch(error => {
       console.log(error)
-      res.status(400).send( { error: 'malformatted id'})
+      res.status(400).send( { error: 'malformatted id' })
     })
 })
 
@@ -48,7 +48,7 @@ app.delete('/api/persons/:id', (req, res) => {
       res.status(204).end()
     })
     .catch(error => {
-      res.status(400).send( {error: 'malformattaed id'})
+      res.status(400).send( { error: 'malformattaed id' })
     })
 })
 
@@ -63,7 +63,7 @@ const checkDuplicate = (name) => {
         console.log("aiomme palauttaa true")
         //palauttaa jostain syystä undefined?
         return true
-      } 
+      }
       else {
         console.log('aiomme palauttaa false')
         //palauttaa jostain syystä undefined?
@@ -77,15 +77,15 @@ const checkDuplicate = (name) => {
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
-  console.log(body.name, body.number);
-  
-  if (body.name === "" || body.number === "") {
-    return res.status(400).json({error: 'content missing'})
+  console.log(body.name, body.number)
+
+  if (body.name === '' || body.number === '') {
+    return res.status(400).json({ error: 'content missing' })
   }
-  
+
   //console.log('onko duplikaatti: ', checkDuplicate(body.name))
   if(checkDuplicate(body.name)) {
-    return res.status(400).json({error: 'name already in the database'})
+    return res.status(400).json({ error: 'name already in the database' })
   } else {
 
     const person = new Person({
@@ -120,7 +120,7 @@ app.put('/api/persons/:id', (req, res) => {
     })
     .catch(error => {
       console.log(error)
-      res.status(400).send({ error: 'malformatted id'})
+      res.status(400).send({ error: 'malformatted id' })
     })
 })
 

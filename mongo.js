@@ -14,14 +14,14 @@ const addToDatabse = (name, number) => {
 const printPeople = () => {
   console.log('Puhelinluettelo:')
   Person
-  .find({})
-  .then(result => {
-    console.log(result)
-    console.log('-------')
-    result.forEach(person => console.log(Person.format(person)))
-    mongoose.connection.close()
-  })
-/*   const persons = 
+    .find({})
+    .then(result => {
+      console.log(result)
+      console.log('-------')
+      result.forEach(person => console.log(Person.format(person)))
+      mongoose.connection.close()
+    })
+/*   const persons =
     Person
       .find({})
       .then(result => {

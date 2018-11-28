@@ -1,4 +1,4 @@
-require("dotenv").config()
+require('dotenv').config()
 const mongoose = require('mongoose')
 
 const url = process.env.DB_HOST
@@ -11,10 +11,10 @@ const personSchema = new mongoose.Schema({
 })
 
 personSchema.statics.format = function(person) {
-  return { 
+  return {
     id: person._id,
-    name: person.name, 
-    number: person.number    
+    name: person.name,
+    number: person.number
   }
 }
 
