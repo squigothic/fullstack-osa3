@@ -33,7 +33,11 @@ app.get('/api/persons/:id', (req, res) => {
   Person
     .findById(req.params.id)
     .then(person => {
-      res.json(Person.format(person))
+      if (person) {
+        res.json(Person.format(person))    
+      } else {
+        res.status(404).end()
+      }
     })
     .catch(error => {
       console.log(error)
@@ -45,6 +49,7 @@ app.delete('/api/persons/:id', (req, res) => {
   Person
     .findByIdAndDelete(req.params.id)
     .then(result => {
+      console.log('poistettiin tietokannasta: ', result.name)
       res.status(204).end()
     })
     .catch(error => {
@@ -52,9 +57,9 @@ app.delete('/api/persons/:id', (req, res) => {
     })
 })
 
-const checkDuplicate = (name) => {
+/*const checkDuplicate = (name) => {
   return false
-/*   console.log('päädyttiin checkduplicate-funkkariin')
+   console.log('päädyttiin checkduplicate-funkkariin')
   Person
     .find({})
     .then(result => {
@@ -72,37 +77,34 @@ const checkDuplicate = (name) => {
     })
     .catch(error => {
       console.log(error)
-    }) */
-}
+    }) 
+}*/
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
   console.log(body.name, body.number)
 
-  if (body.name === '' || body.number === '') {
+  if (!body.name || !body.number) {
     return res.status(400).json({ error: 'content missing' })
   }
 
-  //console.log('onko duplikaatti: ', checkDuplicate(body.name))
-  if(checkDuplicate(body.name)) {
+  /* if(checkDuplicate(body.name)) {
     return res.status(400).json({ error: 'name already in the database' })
-  } else {
+  } else { */
 
-    const person = new Person({
-      name: body.name,
-      number: body.number
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+
+  person
+    .save()
+    .then(savedPerson => {
+      res.json(Person.format(person))
     })
-
-    person
-      .save()
-      .then(savedPerson => {
-        res.json(Person.format(person))
-        mongoose.connection.close()
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 app.put('/api/persons/:id', (req, res) => {
