@@ -6,6 +6,7 @@ const addToDatabse = (name, number) => {
   person
     .save()
     .then(response => {
+      console.log(response)
       console.log(`Lisätään henkilö ${name} ${number} luetteloon`)
       mongoose.connection.close()
     })

@@ -4,7 +4,6 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./modules/person')
-const mongoose = require('mongoose')
 
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 
@@ -34,14 +33,14 @@ app.get('/api/persons/:id', (req, res) => {
     .findById(req.params.id)
     .then(person => {
       if (person) {
-        res.json(Person.format(person))    
+        res.json(Person.format(person))
       } else {
         res.status(404).end()
       }
     })
     .catch(error => {
       console.log(error)
-      res.status(400).send( { error: 'malformatted id' })
+      res.status(400).send({ error: 'malformatted id' })
     })
 })
 
@@ -77,7 +76,7 @@ app.delete('/api/persons/:id', (req, res) => {
     })
     .catch(error => {
       console.log(error)
-    }) 
+    })
 }*/
 
 app.post('/api/persons', (req, res) => {
@@ -100,7 +99,7 @@ app.post('/api/persons', (req, res) => {
   person
     .save()
     .then(savedPerson => {
-      res.json(Person.format(person))
+      res.json(Person.format(savedPerson))
     })
     .catch(error => {
       console.log(error)
