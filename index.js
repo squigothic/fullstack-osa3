@@ -52,57 +52,59 @@ app.delete('/api/persons/:id', (req, res) => {
       res.status(204).end()
     })
     .catch(error => {
+      console.log(error)
       res.status(400).send( { error: 'malformattaed id' })
     })
 })
 
-/*const checkDuplicate = (name) => {
-  return false
-   console.log('päädyttiin checkduplicate-funkkariin')
-  Person
-    .find({})
-    .then(result => {
-      const namesList = result.map(person => person.name)
-      if (namesList.includes(name)) {
-        console.log("aiomme palauttaa true")
-        //palauttaa jostain syystä undefined?
-        return true
-      }
-      else {
-        console.log('aiomme palauttaa false')
-        //palauttaa jostain syystä undefined?
-        return false
-      }
-    })
-    .catch(error => {
-      console.log(error)
-    })
-}*/
+const checkForMatch = (result) => {
+  console.log('result: ', result)
+  if (result) {
+    console.log('löydettiin mätsi')
+    return true
+  } else {
+    console.log('ei löydetty mätsiä')
+    return false
+  }
+}
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
-  console.log(body.name, body.number)
 
-  if (!body.name || !body.number) {
+  const [name, number] = [body.name, body.number]
+
+  console.log(name, number)
+
+  if (!name || !number) {
     return res.status(400).json({ error: 'content missing' })
   }
 
-  /* if(checkDuplicate(body.name)) {
-    return res.status(400).json({ error: 'name already in the database' })
-  } else { */
-
-  const person = new Person({
-    name: body.name,
-    number: body.number
-  })
-
-  person
-    .save()
-    .then(savedPerson => {
-      res.json(Person.format(savedPerson))
+  Person
+    .findOne({ name })
+    .then(checkForMatch)
+    .then(matchOrNot => {
+      console.log('matchOrNot tulos:', matchOrNot)
+      if (matchOrNot) {
+        console.log('koska mätsi, palautetaan error 400')
+        res.status(400).json({ error: 'name already in the database' })
+      } else {
+        console.log('luodaan henkilö')
+        const person = new Person({
+          name,
+          number
+        })
+        person
+          .save()
+          .then(savedPerson => {
+            res.json(Person.format(savedPerson))
+          })
+          .catch(error => {
+            console.log('sisemmässä promisessa virhe: ', error)
+          })
+      }
     })
     .catch(error => {
-      console.log(error)
+      console.log('virhe oli tällainen: ', error)
     })
 })
 
